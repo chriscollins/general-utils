@@ -13,7 +13,7 @@ Require in your project via composer.json as follows:
 ```json
 {
     "require": {
-        "chriscollins/general-utils": "~1.0"
+        "chriscollins/general-utils": "~1.0.0"
     }
 }
 ```
