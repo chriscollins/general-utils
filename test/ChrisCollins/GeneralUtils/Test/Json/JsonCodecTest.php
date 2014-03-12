@@ -1,11 +1,12 @@
 <?php
 
-namespace ChrisCollins\GeneralUtils\Test;
+namespace ChrisCollins\GeneralUtils\Test\Json;
 
+use ChrisCollins\GeneralUtils\Test\AbstractTestCase;
 use ChrisCollins\GeneralUtils\Json\JsonCodec;
 use ChrisCollins\GeneralUtils\Exception\JsonException;
 use ChrisCollins\GeneralUtils\Test\Fixture\GenericJsonFixture;
-use \stdClass;
+use stdClass;
 
 /**
  * JsonCodecTest

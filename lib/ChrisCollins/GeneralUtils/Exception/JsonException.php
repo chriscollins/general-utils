@@ -2,7 +2,7 @@
 
 namespace ChrisCollins\GeneralUtils\Exception;
 
-use \RuntimeException;
+use RuntimeException;
 
 /**
  * JsonException

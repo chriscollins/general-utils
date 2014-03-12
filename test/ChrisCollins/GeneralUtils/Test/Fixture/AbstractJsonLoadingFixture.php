@@ -2,7 +2,7 @@
 
 namespace ChrisCollins\GeneralUtils\Test\Fixture;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * AbstractJsonLoadingFixture

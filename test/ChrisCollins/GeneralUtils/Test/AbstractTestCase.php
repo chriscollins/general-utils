@@ -2,7 +2,7 @@
 
 namespace ChrisCollins\GeneralUtils\Test;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
 /**
  * AbstractTestCase
