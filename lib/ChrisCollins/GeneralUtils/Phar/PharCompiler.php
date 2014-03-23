@@ -33,6 +33,7 @@ class PharCompiler
         }
 
         $phar = $this->initialisePhar($pharOutputPath, 0, $pharBaseName);
+        $phar->startBuffering();
 
         foreach ($this->files as $file) {
             $this->addFileToPhar($file, $phar);
@@ -41,6 +42,7 @@ class PharCompiler
         $this->addFileToPhar($binPath, $phar);
 
         $phar->setStub($this->createStub($pharBaseName, $binPath));
+        $phar->stopBuffering();
     }
 
     /**
