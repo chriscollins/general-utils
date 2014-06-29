@@ -15,6 +15,11 @@
         "ext-mbstring": "*",
         "symfony/finder": "~2.4"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.1",
+        "squizlabs/php_codesniffer": "~1.5",
+        "phpmd/phpmd": "~2.0"
+    },
     "autoload": {
         "psr-0": { "": "lib/" }
     },
@@ -22,5 +27,8 @@
         "branch-alias": {
             "dev-master": "1.1.x-dev"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }

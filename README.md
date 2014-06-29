@@ -1,6 +1,8 @@
 General Utilities
 =================
 
+[![Build Status](https://travis-ci.org/chriscollins/general-utils.svg?branch=master)](https://travis-ci.org/chriscollins/general-utils)
+
 General PHP utilities.
 
 [https://github.com/chriscollins/general-utils](https://github.com/chriscollins/general-utils)

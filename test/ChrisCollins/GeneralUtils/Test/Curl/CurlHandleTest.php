@@ -13,7 +13,7 @@ class CurlHandleTest extends AbstractTestCase
     /**
      * @var string Constant for an example URL.
      */
-    const EXAMPLE_URL = 'http://example.com';
+    const EXAMPLE_URL = 'http://example.com/';
 
     /**
      * @var string Constant for an example URL that does not exist.
