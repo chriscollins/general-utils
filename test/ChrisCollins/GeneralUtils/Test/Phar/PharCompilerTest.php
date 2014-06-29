@@ -59,9 +59,7 @@ class PharCompilerTest extends AbstractTestCase
 
     public function testCompileCreatesAPharObjectAndCallsExpectedMethodsOnIt()
     {
-        $phar = $this->getMockBuilder('Phar')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $phar = $this->getMock('Phar', array(), array('C:\test.phar'), '', true);
 
         $phar->expects($this->exactly(2))
             ->method('addFromString')
