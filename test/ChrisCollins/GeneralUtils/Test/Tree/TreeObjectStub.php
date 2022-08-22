@@ -3,6 +3,7 @@
 namespace ChrisCollins\GeneralUtils\Test\Tree;
 
 use ChrisCollins\GeneralUtils\Tree\TreeNodeObjectInterface;
+use InvalidArgumentException;
 
 /**
  * TreeObjectStub
@@ -12,22 +13,22 @@ use ChrisCollins\GeneralUtils\Tree\TreeNodeObjectInterface;
 class TreeObjectStub implements TreeNodeObjectInterface
 {
     /**
-     * @var integer The ID of this object.
+     * @var int|null The ID of this object.
      */
-    protected $id = null;
+    private ?int $id;
 
     /**
-     * @var integer The ID of this object's parent.
+     * @var int|null The ID of this object's parent.
      */
-    protected $parentId = null;
+    private ?int $parentId;
 
     /**
      * Constructor.
      *
-     * @param integer $id The ID.
-     * @param integer $parentId The ID of the parent object.
+     * @param int|null $id The ID.
+     * @param int|null $parentId The ID of the parent object.
      */
-    public function __construct($id, $parentId)
+    public function __construct(?int $id, ?int $parentId)
     {
         $this->id = $id;
         $this->parentId = $parentId;
@@ -36,17 +37,21 @@ class TreeObjectStub implements TreeNodeObjectInterface
     /**
      * {@inheritDoc}
      */
-    public function isParentOf(TreeNodeObjectInterface $object)
+    public function isParentOf(TreeNodeObjectInterface $object): bool
     {
+        if (!$object instanceof TreeObjectStub) {
+            throw new InvalidArgumentException('Invalid object given.');
+        }
+
         return $object->getParentId() === $this->id;
     }
 
     /**
      * Accessor method.
      *
-     * @return integer The value of the property.
+     * @return int|null The value of the property.
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -54,9 +59,9 @@ class TreeObjectStub implements TreeNodeObjectInterface
     /**
      * Accessor method.
      *
-     * @return integer The value of the property.
+     * @return int|null The value of the property.
      */
-    public function getParentId()
+    public function getParentId(): ?int
     {
         return $this->parentId;
     }

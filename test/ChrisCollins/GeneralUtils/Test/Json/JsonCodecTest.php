@@ -26,7 +26,7 @@ class JsonCodecTest extends AbstractTestCase
     /**
      * Set up.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->genericJsonFixture = new GenericJsonFixture();
 
@@ -35,7 +35,7 @@ class JsonCodecTest extends AbstractTestCase
 
     // Decode.
 
-    public function testDecodeReturnsExpectedObject()
+    public function testDecodeReturnsExpectedObject(): void
     {
         $json = $this->genericJsonFixture->getJsonFromFile('valid.json');
         $actual = $this->instance->decode($json);
@@ -45,7 +45,7 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testDecodeReturnsExpectedArrayWhenSecondParameterIsTrue()
+    public function testDecodeReturnsExpectedArrayWhenSecondParameterIsTrue(): void
     {
         $json = $this->genericJsonFixture->getJsonFromFile('valid.json');
         $actual = $this->instance->decode($json, true);
@@ -55,7 +55,7 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testDecodeThrowsExceptionWhenJsonIsInvalid()
+    public function testDecodeThrowsExceptionWhenJsonIsInvalid(): void
     {
         $exceptionThrown = false;
 
@@ -69,7 +69,7 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertTrue($exceptionThrown);
     }
 
-    public function testDecodeThrowsExceptionWhenJsonContainsBadControlChar()
+    public function testDecodeThrowsExceptionWhenJsonContainsBadControlChar(): void
     {
         $exceptionThrown = false;
 
@@ -85,7 +85,7 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertTrue($exceptionThrown);
     }
 
-    public function testDecodeThrowsExceptionWhenStateMismatchIsCaused()
+    public function testDecodeThrowsExceptionWhenStateMismatchIsCaused(): void
     {
         $exceptionThrown = false;
 
@@ -99,7 +99,7 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertTrue($exceptionThrown);
     }
 
-    public function testDecodeThrowsExceptionWhenMaxDepthIsExceeded()
+    public function testDecodeThrowsExceptionWhenMaxDepthIsExceeded(): void
     {
         $exceptionThrown = false;
 
@@ -118,7 +118,7 @@ class JsonCodecTest extends AbstractTestCase
 
     // Encode.
 
-    public function testEncodeOnObjectReturnsExpectedString()
+    public function testEncodeOnObjectReturnsExpectedString(): void
     {
         $object = $this->getValidObject();
         $actual = $this->instance->encode($object);
@@ -128,7 +128,7 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testEncodeOnArrayReturnsExpectedString()
+    public function testEncodeOnArrayReturnsExpectedString(): void
     {
         $object = $this->getValidArray();
         $actual = $this->instance->encode($object);
@@ -138,7 +138,7 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testEncodeThrowsExceptionWhenArrayIsInvalid()
+    public function testEncodeThrowsExceptionWhenArrayIsInvalid(): void
     {
         $exceptionThrown = false;
 

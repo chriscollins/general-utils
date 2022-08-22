@@ -14,7 +14,7 @@ interface TreeNodeObjectInterface
      *
      * @param TreeNodeObjectInterface $object The potential child.
      *
-     * @return boolean True if this object is the parent of the given object.
+     * @return bool True if this object is the parent of the given object.
      */
-    public function isParentOf(TreeNodeObjectInterface $object);
+    public function isParentOf(TreeNodeObjectInterface $object): bool;
 }

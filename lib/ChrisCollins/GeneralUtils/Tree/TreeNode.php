@@ -12,17 +12,17 @@ class TreeNode
     /**
      * @var TreeNodeObjectInterface The object contained by the tree node.
      */
-    protected $object = null;
+    private TreeNodeObjectInterface $object;
 
     /**
-     * @var TreeNode The parent of this node.
+     * @var TreeNode|null The parent of this node.
      */
-    protected $parent = null;
+    private ?TreeNode $parent = null;
 
     /**
      * @var array Array of tree node children.
      */
-    protected $children = array();
+    private array $children = [];
 
     /**
      * Constructor.
@@ -61,9 +61,9 @@ class TreeNode
     /**
      * Accessor method.
      *
-     * @return TreeNode The value of the property.
+     * @return TreeNode|null The value of the property.
      */
-    public function getParent()
+    public function getParent(): ?TreeNode
     {
         return $this->parent;
     }
@@ -71,11 +71,11 @@ class TreeNode
     /**
      * Mutator method.
      *
-     * @param TreeNode The new value of the property.
+     * @param TreeNode|null The new value of the property.
      *
-     * @return TreeNode This object.
+     * @return static This object.
      */
-    public function setParent(TreeNode $parent)
+    public function setParent(?TreeNode $parent): self
     {
         $this->parent = $parent;
 
@@ -87,7 +87,7 @@ class TreeNode
      *
      * @return array The value of the property.
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -97,9 +97,9 @@ class TreeNode
      *
      * @param array The new value of the property.
      *
-     * @return TreeNode This object.
+     * @return static This object.
      */
-    public function setChildren($children)
+    public function setChildren($children): self
     {
         $this->children = $children;
 
@@ -110,18 +110,22 @@ class TreeNode
      * Add a child.
      *
      * @param TreeNode $child A child tree node.
+     *
+     * @return static This object.
      */
-    public function addChild(TreeNode $child)
+    public function addChild(TreeNode $child): self
     {
         $this->children[] = $child;
+
+        return $this;
     }
 
     /**
      * Determine if this node is a root node, i.e. it has no parent.
      *
-     * @return boolean True if this is a root node, i.e. it has no parent.
+     * @return bool True if this is a root node, i.e. it has no parent.
      */
-    public function isRootNode()
+    public function isRootNode(): bool
     {
         return $this->parent === null;
     }
@@ -129,16 +133,16 @@ class TreeNode
     /**
      * Build a tree from an array of TreeNodeObjectInterface objects.
      *
-     * @param array $objects An array of TreeNodeObjectInterface objects to make into a tree.
+     * @param TreeNodeObjectInterface[] $objects An array of TreeNodeObjectInterface objects to make into a tree.
      *
      * @return array An array of TreeNodes, each representing a root (i.e. a node for which no parent was found).
      */
-    public static function buildTreeAndGetRoots(array $objects)
+    public static function buildTreeAndGetRoots(array $objects): array
     {
         $nodeClass = get_called_class(); // Use late static binding so new nodes are created as the calling subclass.
 
         // Build a TreeNode for each object.
-        $nodes = array();
+        $nodes = [];
         foreach ($objects as $object) {
             $nodes[] = new $nodeClass($object);
         }
@@ -158,7 +162,7 @@ class TreeNode
         }
 
         // Now find the root nodes and return them.
-        $roots = array();
+        $roots = [];
         foreach ($nodes as $potentialRoot) {
             if ($potentialRoot->isRootNode()) {
                 $roots[] = $potentialRoot;

@@ -15,7 +15,7 @@ class PharCompiler
     /**
      * @var array An array of file paths to add to the phar.
      */
-    protected $files = array();
+    private array $files = [];
 
     /**
      * Compiles the project into a phar file.
@@ -23,7 +23,7 @@ class PharCompiler
      * @param string $pharOutputPath The path to the phar file that will be created.
      * @param string $binPath The path to the executable file for the stub, i.e. the entry point to the application.
      */
-    public function compile($pharOutputPath, $binPath)
+    public function compile(string $pharOutputPath, string $binPath): void
     {
         $pharBaseName = basename($pharOutputPath);
 
@@ -50,9 +50,9 @@ class PharCompiler
      *
      * @param string $path The path to the directory.
      *
-     * @return PharCompiler This object.
+     * @return static This object.
      */
-    public function addDirectory($path)
+    public function addDirectory(string $path): self
     {
         $finder = new Finder();
         $finder->files()
@@ -72,9 +72,9 @@ class PharCompiler
      *
      * @param string $path The path to the file.
      *
-     * @return PharCompiler This object.
+     * @return static This object.
      */
-    public function addFile($path)
+    public function addFile($path): self
     {
         $this->files[] = $path;
 
@@ -86,7 +86,7 @@ class PharCompiler
      *
      * @return array The value of the property.
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->files;
     }
@@ -96,7 +96,7 @@ class PharCompiler
      *
      * @param string $path The path to the directory.
      */
-    protected function addFileToPhar($path, Phar $phar)
+    private function addFileToPhar($path, Phar $phar): void
     {
         $realPath = realpath($path);
 
@@ -113,7 +113,7 @@ class PharCompiler
      *
      * @return string The stub.
      */
-    protected function createStub($pharBaseName, $binPath)
+    private function createStub($pharBaseName, $binPath): string
     {
         $template = <<<EOF
 #!/usr/bin/env php
@@ -127,7 +127,7 @@ __HALT_COMPILER();
 
 EOF;
 
-        return str_replace(array('##BASENAME##', '##BINPATH##'), array($pharBaseName, $binPath), $template);
+        return str_replace(['##BASENAME##', '##BINPATH##'], [$pharBaseName, $binPath], $template);
     }
 
     /**
@@ -139,7 +139,7 @@ EOF;
      *
      * @return Phar The Phar.
      */
-    protected function initialisePhar($pharOutputPath, $flags, $pharBaseName)
+    private function initialisePhar($pharOutputPath, $flags, $pharBaseName): Phar
     {
         return new Phar($pharOutputPath, $flags, $pharBaseName);
     }

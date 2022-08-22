@@ -14,28 +14,30 @@ class JsonCodec
     /**
      * @var string Constant for "unknown error" message.
      */
-    const UNKNOWN_ERROR_MESSAGE = 'Unknown error.';
+    public const UNKNOWN_ERROR_MESSAGE = 'Unknown error.';
 
     /**
      * @var array Array of error messages, keyed on error code.
      */
-    protected static $errorMessages = array(
+    private static $errorMessages = [
         JSON_ERROR_DEPTH => 'Maximum stack depth exceeded.',
         JSON_ERROR_STATE_MISMATCH => 'Underflow or the modes mismatch.',
         JSON_ERROR_CTRL_CHAR => 'Unexpected control character found.',
         JSON_ERROR_SYNTAX => 'Syntax error, malformed JSON.',
         JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded.'
-    );
+    ];
 
     /**
      * Decode a JSON string to a PHP object/array.
      *
      * @param string $json The JSON.
-     * @param boolean $associativeArray If true, an associative array will be returned, otherwise a stdClass object.
+     * @param bool $associativeArray If true, an associative array will be returned, otherwise a stdClass object.
      *
-     * @return mixed An associative array or stdClass object.  If there was a problem, null is returned.
+     * @throws JsonException Thrown if there was a problem.
+     *
+     * @return mixed An associative array or stdClass object.
      */
-    public function decode($json, $associativeArray = false)
+    public function decode(string $json, bool $associativeArray = false)
     {
         $decoded = json_decode($json, $associativeArray);
 
@@ -53,14 +55,15 @@ class JsonCodec
      *
      * @param mixed $value The value to encode.
      * @param int $optionsMask A bitmask of options (see PHP's json_encode function for acceptable values).
+     * @param int $depth The maximum depth.
+     *
+     * @throws JsonException Thrown if the there was an error encoding the value.
      *
      * @return string A JSON string.
-     *
-     * @todo Support the depth parameter when PHP 5.5 is more prevalent.
      */
-    public function encode($value, $optionsMask = 0)
+    public function encode($value, int $optionsMask = 0, int $depth = 512): string
     {
-        $encoded = json_encode($value, $optionsMask);
+        $encoded = json_encode($value, $optionsMask, $depth);
 
         $lastError = json_last_error();
 
@@ -76,16 +79,10 @@ class JsonCodec
      *
      * @param int $errorCode The error code.
      *
-     * @return string|null A message, or null if there was no error.
+     * @return string A string error message.
      */
-    protected function translateErrorMessage($errorCode)
+    private function translateErrorMessage(int $errorCode): string
     {
-        $message = self::UNKNOWN_ERROR_MESSAGE;
-
-        if (isset(self::$errorMessages[$errorCode])) {
-            $message = self::$errorMessages[$errorCode];
-        }
-
-        return $message;
+        return self::$errorMessages[$errorCode] ?? self::UNKNOWN_ERROR_MESSAGE;
     }
 }

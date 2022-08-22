@@ -2,13 +2,13 @@
 
 namespace ChrisCollins\GeneralUtils\Test;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * AbstractTestCase
  *
  * Abstract test case class.
  */
-abstract class AbstractTestCase extends PHPUnit_Framework_TestCase
+abstract class AbstractTestCase extends TestCase
 {
 }

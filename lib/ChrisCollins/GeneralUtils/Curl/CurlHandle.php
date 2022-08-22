@@ -12,34 +12,34 @@ class CurlHandle
     /**
      * @var Resource A cURL handle Resource.
      */
-    protected $handle = null;
+    private $handle;
 
     /**
      * @var array Associative array of options, as cURL does not allow us to retrieve options from the handle itself.
      */
-    protected $options = array();
+    private array $options = [];
 
     /**
      * @var array Associative array of information about the last request.
      */
-    protected $info = array();
+    private array $info = [];
 
     /**
      * @var int|null The error code for the last request.
      */
-    protected $errorCode = null;
+    private ?int $errorCode = null;
 
     /**
-     * @var int|null The error message for the last request.
+     * @var string|null The error message for the last request.
      */
-    protected $errorMessage = null;
+    private ?string $errorMessage = null;
 
     /**
      * Constructor.
      *
      * @param string|null $url An optional URL to fetch.
      */
-    public function __construct($url = null)
+    public function __construct(?string $url = null)
     {
         $this->initialise($url);
     }
@@ -47,18 +47,18 @@ class CurlHandle
     /**
      * Initialise (or reinitialise) the object.
      *
-     * @param string|null $url An optional URL to fetch.
+     * @param ?string|null $url An optional URL to fetch.
      */
-    public function initialise($url = null)
+    public function initialise(?string $url = null)
     {
         $this->replaceOptions(
-            array(
+            [
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true
-            )
+            ]
         );
 
-        $this->info = array();
+        $this->info = [];
     }
 
     /**
@@ -66,7 +66,7 @@ class CurlHandle
      *
      * @return string The content at the URL.
      */
-    public function execute()
+    public function execute(): string
     {
         $this->initialiseHandle();
 
@@ -86,7 +86,7 @@ class CurlHandle
     /**
      * Initialise the handle.
      */
-    protected function initialiseHandle()
+    private function initialiseHandle(): void
     {
         $this->handle = curl_init();
     }
@@ -94,7 +94,7 @@ class CurlHandle
     /**
      * Close the handle, freeing resources.
      */
-    protected function closeHandle()
+    private function closeHandle(): void
     {
         curl_close($this->handle);
     }
@@ -106,7 +106,7 @@ class CurlHandle
      *
      * @return array The value of the property.
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -115,8 +115,10 @@ class CurlHandle
      * Mutator method.
      *
      * @param array $options The new value of the property.
+     *
+     * @return static
      */
-    public function replaceOptions(array $options)
+    public function replaceOptions(array $options): self
     {
         $this->options = $options;
 
@@ -130,9 +132,9 @@ class CurlHandle
      *
      * @return mixed The value of the option.
      */
-    public function getOption($option)
+    public function getOption(int $option)
     {
-        return isset($this->options[$option]) ? $this->options[$option] : null;
+        return $this->options[$option] ?? null;
     }
 
     /**
@@ -140,36 +142,44 @@ class CurlHandle
      *
      * @param int $option The CURLOPT_{name} option to set.
      * @param mixed $value The value for the option.
+     *
+     * @return static This object.
      */
-    public function setOption($option, $value)
+    public function setOption(int $option, $value): self
     {
         $this->options[$option] = $value;
+
+        return $this;
     }
 
     /**
      * Set multiple cURL options to be applied to the next request.
      *
      * @param array $options An array of CURLOPT_{name} options.
+     *
+     * @return static This object.
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): self
     {
         $this->options = array_replace($this->options, $options);
+
+        return $this;
     }
 
     /**
      * Clear any options that have been set.
      */
-    public function clearOptions()
+    public function clearOptions(): void
     {
-        $this->options = array();
+        $this->options = [];
     }
 
     /**
      * Apply the cached options to the handle.
      *
-     * @return boolean True if all options were set successfully, false if one of them failed.
+     * @return bool True if all options were set successfully, false if one of them failed.
      */
-    protected function applyOptionsToHandle()
+    private function applyOptionsToHandle(): bool
     {
         return curl_setopt_array($this->handle, $this->options);
     }
@@ -179,7 +189,7 @@ class CurlHandle
      *
      * @return string|null The URL, or null if it has not yet been set.
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->getOption(CURLOPT_URL);
     }
@@ -189,9 +199,9 @@ class CurlHandle
      *
      * @param string $url The URL.
      *
-     * @return CurlHandle This object.
+     * @return static This object.
      */
-    public function setUrl($url)
+    public function setUrl($url): self
     {
         $this->setOption(CURLOPT_URL, $url);
 
@@ -203,7 +213,7 @@ class CurlHandle
      *
      * @return array The value of the property.
      */
-    public function getInfo()
+    public function getInfo(): array
     {
         return $this->info;
     }
@@ -213,17 +223,17 @@ class CurlHandle
      *
      * @return array An array of information.
      */
-    protected function getInfoFromHandle()
+    private function getInfoFromHandle(): array
     {
-        return $this->handle === null ? array() : curl_getinfo($this->handle);
+        return $this->handle === null ? [] : curl_getinfo($this->handle);
     }
 
     /**
      * Accessor method.
      *
-     * @return array The value of the property.
+     * @return int|null The value of the property.
      */
-    public function getErrorCode()
+    public function getErrorCode(): ?int
     {
         return $this->errorCode;
     }
@@ -233,7 +243,7 @@ class CurlHandle
      *
      * @return int|null An integer representing the last error that occurred, or null if there were no problems.
      */
-    public function getErrorCodeFromHandle()
+    public function getErrorCodeFromHandle(): ?int
     {
         $errorNumber = null;
 
@@ -247,9 +257,9 @@ class CurlHandle
     /**
      * Accessor method.
      *
-     * @return array The value of the property.
+     * @return string|null The value of the property.
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): ?string
     {
         return $this->errorMessage;
     }
@@ -259,12 +269,12 @@ class CurlHandle
      *
      * @return string|null An error message, or null if there was no error.
      */
-    public function getErrorMessageFromHandle()
+    public function getErrorMessageFromHandle(): ?string
     {
         $errorMessage = null;
 
         if ($this->handle !== null) {
-            $errorMessage = curl_errno($this->handle);
+            $errorMessage = curl_error($this->handle);
         }
 
         return $errorMessage === '' ? null : $errorMessage;
@@ -285,9 +295,9 @@ class CurlHandle
      *
      * @param Resource $handle The new value of the property.
      *
-     * @return CurlHandle This object.
+     * @return static This object.
      */
-    public function setHandle($handle)
+    public function setHandle($handle): self
     {
         $this->handle = $handle;
 

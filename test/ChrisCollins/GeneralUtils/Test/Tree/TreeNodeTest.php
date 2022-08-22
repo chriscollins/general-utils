@@ -23,14 +23,14 @@ class TreeNodeTest extends AbstractTestCase
     /**
      * Set up.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->treeObjects = $this->getTreeObjects();
 
         $this->instance = new TreeNode(new TreeObjectStub(1, 2));
     }
 
-    public function testConstructorSetsObject()
+    public function testConstructorSetsObject(): void
     {
         $treeObject = $this->treeObjects[0];
 
@@ -58,7 +58,7 @@ class TreeNodeTest extends AbstractTestCase
     /**
      * @dataProvider getFieldNamesAndInputs
      */
-    public function testGettersReturnValuesSetBySetters($fieldName, $input)
+    public function testGettersReturnValuesSetBySetters($fieldName, $input): void
     {
         $setter = 'set' . ucfirst($fieldName);
         $getter = 'get' . ucfirst($fieldName);
@@ -70,7 +70,7 @@ class TreeNodeTest extends AbstractTestCase
         $this->assertEquals($input, $instance->$getter());
     }
 
-    public function testGetChildrenReturnsNodesAddedByAddChild()
+    public function testGetChildrenReturnsNodesAddedByAddChild(): void
     {
         $node = new TreeNode($this->treeObjects[0]);
         $childNode = new TreeNode($this->treeObjects[1]);
@@ -82,7 +82,7 @@ class TreeNodeTest extends AbstractTestCase
         $this->assertEquals($childNode, $children[0]);
     }
 
-    public function testIsRootNodeReturnsExpectedValue()
+    public function testIsRootNodeReturnsExpectedValue(): void
     {
         $node = new TreeNode($this->treeObjects[0]);
         $this->assertTrue($node->isRootNode());
@@ -95,7 +95,7 @@ class TreeNodeTest extends AbstractTestCase
         $this->assertTrue($parent->isRootNode());
     }
 
-    public function testBuildTreeAndGetRootsReturnsExpectedTree()
+    public function testBuildTreeAndGetRootsReturnsExpectedTree(): void
     {
         $roots = TreeNode::buildTreeAndGetRoots($this->treeObjects);
 

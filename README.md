@@ -1,7 +1,7 @@
 General Utilities
 =================
 
-[![Build Status](https://travis-ci.org/chriscollins/general-utils.svg?branch=master)](https://travis-ci.org/chriscollins/general-utils)
+![Build Status](https://github.com/chriscollins/general-utils/actions/workflows/build.yml/badge.svg)
 
 General PHP utilities.
 
@@ -15,7 +15,7 @@ Require in your project via composer.json as follows:
 ```json
 {
     "require": {
-        "chriscollins/general-utils": "~1.0.0"
+        "chriscollins/general-utils": "~2.0.0"
     }
 }
 ```

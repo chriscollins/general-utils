@@ -28,12 +28,12 @@ class CurlHandleTest extends AbstractTestCase
     /**
      * Set up.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->instance = new CurlHandle();
     }
 
-    public function testConstructorSetsUrlIfPresent()
+    public function testConstructorSetsUrlIfPresent(): void
     {
         $url = self::EXAMPLE_URL;
 
@@ -42,7 +42,7 @@ class CurlHandleTest extends AbstractTestCase
         $this->assertEquals($url, $this->instance->getOption(CURLOPT_URL));
     }
 
-    public function testConstructorSetsUrlToNullIfNotPresent()
+    public function testConstructorSetsUrlToNullIfNotPresent(): void
     {
         $this->instance = new CurlHandle();
 
@@ -57,7 +57,7 @@ class CurlHandleTest extends AbstractTestCase
      *
      * @dataProvider getPropertyNamesAndTestValues
      */
-    public function testGettersReturnValuesSetBySetters($propertyName, $propertyValue)
+    public function testGettersReturnValuesSetBySetters($propertyName, $propertyValue): void
     {
         $ucfirstPropertyName = ucfirst($propertyName);
 
@@ -85,7 +85,7 @@ class CurlHandleTest extends AbstractTestCase
         );
     }
 
-    public function testGetOptionRetrievesValueSetBySetOption()
+    public function testGetOptionRetrievesValueSetBySetOption(): void
     {
         $port = 443;
         $this->assertNull($this->instance->getOption(CURLOPT_PORT));
@@ -98,7 +98,7 @@ class CurlHandleTest extends AbstractTestCase
         $this->assertEquals($port, $this->instance->getOption(CURLOPT_PORT));
     }
 
-    public function testGetOptionRetrievesValuesSetBySetOptions()
+    public function testGetOptionRetrievesValuesSetBySetOptions(): void
     {
         $port = 443;
         $timeout = 123;
@@ -128,7 +128,7 @@ class CurlHandleTest extends AbstractTestCase
         $this->assertEquals($timeout, $this->instance->getOption(CURLOPT_TIMEOUT));
     }
 
-    public function testGetOptionsReturnsAllSetOptions()
+    public function testGetOptionsReturnsAllSetOptions(): void
     {
         $options = array(
             CURLOPT_URL => self::EXAMPLE_URL,
@@ -140,7 +140,7 @@ class CurlHandleTest extends AbstractTestCase
         $this->assertEquals($options, $this->instance->getOptions());
     }
 
-    public function testClearOptionsRemovesAnySetOptions()
+    public function testClearOptionsRemovesAnySetOptions(): void
     {
         $optionName = CURLOPT_URL;
         $optionValue = self::EXAMPLE_URL;
@@ -154,7 +154,7 @@ class CurlHandleTest extends AbstractTestCase
         $this->assertNull($this->instance->getOption($optionName));
     }
 
-    public function testReplaceOptionsRemovesAnySetOptionsAndSetsNewOptions()
+    public function testReplaceOptionsRemovesAnySetOptionsAndSetsNewOptions(): void
     {
         $optionName = CURLOPT_URL;
         $optionValue = self::EXAMPLE_URL;
@@ -169,24 +169,24 @@ class CurlHandleTest extends AbstractTestCase
         $this->assertNull($this->instance->getOption($optionName));
     }
 
-    public function testGetErrorCodeReturnsNullIfNoErrorHasOccurred()
+    public function testGetErrorCodeReturnsNullIfNoErrorHasOccurred(): void
     {
         $this->assertNull($this->instance->getErrorCode());
     }
 
-    public function testGetErrorCodeReturnsIntegerIfErrorHasOccurred()
+    public function testGetErrorCodeReturnsIntegerIfErrorHasOccurred(): void
     {
         $this->instance->setUrl(self::EXAMPLE_NON_EXISTANT_URL);
         $this->instance->execute();
         $this->assertNotNull($this->instance->getErrorCode());
     }
 
-    public function testGetErrorMessageReturnsNullIfNoErrorHasOccurred()
+    public function testGetErrorMessageReturnsNullIfNoErrorHasOccurred(): void
     {
         $this->assertNull($this->instance->getErrorMessage());
     }
 
-    public function testGetErrorMessageReturnsStringIfErrorHasOccurred()
+    public function testGetErrorMessageReturnsStringIfErrorHasOccurred(): void
     {
         $this->instance->setUrl(self::EXAMPLE_NON_EXISTANT_URL);
         $this->instance->execute();
@@ -194,12 +194,12 @@ class CurlHandleTest extends AbstractTestCase
         $this->assertNotNull($this->instance->getErrorMessage());
     }
 
-    public function testGetInfoReturnsEmptyArrayIfHandleIsNotInitialised()
+    public function testGetInfoReturnsEmptyArrayIfHandleIsNotInitialised(): void
     {
         $this->assertEquals(array(), $this->instance->getInfo());
     }
 
-    public function testGetInfoReturnsArrayIfRequestHasBeenMade()
+    public function testGetInfoReturnsArrayIfRequestHasBeenMade(): void
     {
         $url = self::EXAMPLE_URL;
 
@@ -207,17 +207,17 @@ class CurlHandleTest extends AbstractTestCase
         $this->instance->execute();
         $info = $this->instance->getInfo();
 
-        $this->assertInternalType('array', $info);
+        $this->assertIsArray($info);
         $this->assertNotEmpty($info);
         $this->assertEquals($url, $info['url']);
         $this->assertEquals(200, $info['http_code']);
     }
 
-    public function testExecuteReturnsExpectedContent()
+    public function testExecuteReturnsExpectedContent(): void
     {
         $this->instance->setUrl(self::EXAMPLE_URL);
         $content = $this->instance->execute();
 
-        $this->assertContains('Example Domain', $content);
+        $this->assertStringContainsString('Example Domain', $content);
     }
 }
