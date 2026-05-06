@@ -1,28 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChrisCollins\GeneralUtils\Test;
 
+use PHPUnit\Framework\Attributes\Test;
 use ChrisCollins\GeneralUtils\Phar\PharCompiler;
 
 /**
  * PharCompilerTest
  */
-class PharCompilerTest extends AbstractTestCase
+final class PharCompilerTest extends AbstractTestCase
 {
     /**
      * @var PharCompiler A PharCompiler instance.
      */
-    protected $instance = null;
+    protected $instance;
 
     /**
      * Set up.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->instance = new PharCompiler();
     }
 
-    public function testGetFilesReturnsFilesAddedViaAddFile(): void
+    #[Test]
+    public function getFilesReturnsFilesAddedViaAddFile(): void
     {
         $this->assertEmpty($this->instance->getFiles());
 
@@ -45,7 +49,8 @@ class PharCompilerTest extends AbstractTestCase
         $this->assertEquals($file2, $files[1]);
     }
 
-    public function testAddDirectoryAddsPhpFilesInADirectory(): void
+    #[Test]
+    public function addDirectoryAddsPhpFilesInADirectory(): void
     {
         $this->assertEmpty($this->instance->getFiles());
         $this->instance->addDirectory(__DIR__);

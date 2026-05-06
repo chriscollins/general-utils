@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChrisCollins\GeneralUtils\Test\Json;
 
+use PHPUnit\Framework\Attributes\Test;
 use ChrisCollins\GeneralUtils\Test\AbstractTestCase;
 use ChrisCollins\GeneralUtils\Json\JsonCodec;
 use ChrisCollins\GeneralUtils\Exception\JsonException;
@@ -11,22 +14,22 @@ use stdClass;
 /**
  * JsonCodecTest
  */
-class JsonCodecTest extends AbstractTestCase
+final class JsonCodecTest extends AbstractTestCase
 {
     /**
      * @var JsonCodec A JsonCodec instance.
      */
-    protected $instance = null;
+    protected $instance;
 
     /**
      * @var GenericJsonFixture A GenericJsonFixture instance.
      */
-    protected $genericJsonFixture = null;
+    protected $genericJsonFixture;
 
     /**
      * Set up.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->genericJsonFixture = new GenericJsonFixture();
 
@@ -35,7 +38,8 @@ class JsonCodecTest extends AbstractTestCase
 
     // Decode.
 
-    public function testDecodeReturnsExpectedObject(): void
+    #[Test]
+    public function decodeReturnsExpectedObject(): void
     {
         $json = $this->genericJsonFixture->getJsonFromFile('valid.json');
         $actual = $this->instance->decode($json);
@@ -45,7 +49,8 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testDecodeReturnsExpectedArrayWhenSecondParameterIsTrue(): void
+    #[Test]
+    public function decodeReturnsExpectedArrayWhenSecondParameterIsTrue(): void
     {
         $json = $this->genericJsonFixture->getJsonFromFile('valid.json');
         $actual = $this->instance->decode($json, true);
@@ -55,21 +60,23 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testDecodeThrowsExceptionWhenJsonIsInvalid(): void
+    #[Test]
+    public function decodeThrowsExceptionWhenJsonIsInvalid(): void
     {
         $exceptionThrown = false;
 
         try {
             $json = $this->genericJsonFixture->getJsonFromFile('invalid.json');
             $decoded = $this->instance->decode($json);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             $exceptionThrown = true;
         }
 
         $this->assertTrue($exceptionThrown);
     }
 
-    public function testDecodeThrowsExceptionWhenJsonContainsBadControlChar(): void
+    #[Test]
+    public function decodeThrowsExceptionWhenJsonContainsBadControlChar(): void
     {
         $exceptionThrown = false;
 
@@ -78,28 +85,30 @@ class JsonCodecTest extends AbstractTestCase
         try {
             $json = '{"x": "' . $backspace . '"}';
             $decoded = $this->instance->decode($json);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             $exceptionThrown = true;
         }
 
         $this->assertTrue($exceptionThrown);
     }
 
-    public function testDecodeThrowsExceptionWhenStateMismatchIsCaused(): void
+    #[Test]
+    public function decodeThrowsExceptionWhenStateMismatchIsCaused(): void
     {
         $exceptionThrown = false;
 
         try {
             $json = '{"x":"y"}}';
             $decoded = $this->instance->decode($json);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             $exceptionThrown = true;
         }
 
         $this->assertTrue($exceptionThrown);
     }
 
-    public function testDecodeThrowsExceptionWhenMaxDepthIsExceeded(): void
+    #[Test]
+    public function decodeThrowsExceptionWhenMaxDepthIsExceeded(): void
     {
         $exceptionThrown = false;
 
@@ -109,7 +118,7 @@ class JsonCodecTest extends AbstractTestCase
 
         try {
             $decoded = $this->instance->decode($json);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             $exceptionThrown = true;
         }
 
@@ -118,7 +127,8 @@ class JsonCodecTest extends AbstractTestCase
 
     // Encode.
 
-    public function testEncodeOnObjectReturnsExpectedString(): void
+    #[Test]
+    public function encodeOnObjectReturnsExpectedString(): void
     {
         $object = $this->getValidObject();
         $actual = $this->instance->encode($object);
@@ -128,7 +138,8 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testEncodeOnArrayReturnsExpectedString(): void
+    #[Test]
+    public function encodeOnArrayReturnsExpectedString(): void
     {
         $object = $this->getValidArray();
         $actual = $this->instance->encode($object);
@@ -138,7 +149,8 @@ class JsonCodecTest extends AbstractTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testEncodeThrowsExceptionWhenArrayIsInvalid(): void
+    #[Test]
+    public function encodeThrowsExceptionWhenArrayIsInvalid(): void
     {
         $exceptionThrown = false;
 
@@ -146,7 +158,7 @@ class JsonCodecTest extends AbstractTestCase
             $array = $this->getValidArray();
             $array['a'] = mb_convert_encoding('é', 'UTF-16', 'UTF-8'); // JSON must be in UTF-8, UTF-16 should break it.
             $decoded = $this->instance->encode($array);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             $exceptionThrown = true;
         }
 
@@ -160,11 +172,11 @@ class JsonCodecTest extends AbstractTestCase
      */
     protected function getValidArray()
     {
-        return array(
+        return [
             'x' => 'y',
             'y' => 1,
             'z' => true
-        );
+        ];
     }
 
     /**
