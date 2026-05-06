@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChrisCollins\GeneralUtils\Test\Tree;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Iterator;
 use ChrisCollins\GeneralUtils\Test\AbstractTestCase;
 use ChrisCollins\GeneralUtils\Tree\TreeNode;
 
 /**
  * TreeNodeTest
  */
-class TreeNodeTest extends AbstractTestCase
+final class TreeNodeTest extends AbstractTestCase
 {
     /**
      * @var array An array of TreeNodeObjectInterface objects.
      */
-    protected $treeObjects = array();
+    protected $treeObjects = [];
 
     /**
      * @var TreeNode A TreeNode.
@@ -23,14 +28,15 @@ class TreeNodeTest extends AbstractTestCase
     /**
      * Set up.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->treeObjects = $this->getTreeObjects();
 
         $this->instance = new TreeNode(new TreeObjectStub(1, 2));
     }
 
-    public function testConstructorSetsObject(): void
+    #[Test]
+    public function constructorSetsObject(): void
     {
         $treeObject = $this->treeObjects[0];
 
@@ -42,35 +48,32 @@ class TreeNodeTest extends AbstractTestCase
     /**
      * Data provider for field names and inputs.
      *
-     * @return array An array of field names and values.
+     * @return Iterator<(int|string), mixed> An array of field names and values.
      */
-    public static function getFieldNamesAndInputs()
+    public static function getFieldNamesAndInputs(): Iterator
     {
         $treeObject = new TreeObjectStub(1, 2);
-
-        return array(
-            array('object', $treeObject),
-            array('parent', new TreeNode($treeObject)),
-            array('children', array()),
-        );
+        yield ['object', $treeObject];
+        yield ['parent', new TreeNode($treeObject)];
+        yield ['children', []];
     }
 
-    /**
-     * @dataProvider getFieldNamesAndInputs
-     */
-    public function testGettersReturnValuesSetBySetters($fieldName, $input): void
+    #[Test]
+    #[DataProvider('getFieldNamesAndInputs')]
+    public function gettersReturnValuesSetBySetters($fieldName, $input): void
     {
-        $setter = 'set' . ucfirst($fieldName);
-        $getter = 'get' . ucfirst($fieldName);
+        $setter = 'set' . ucfirst((string) $fieldName);
+        $getter = 'get' . ucfirst((string) $fieldName);
 
         // Assert that a fluent interface is used.
         $instance = $this->instance->$setter($input);
-        $this->assertInstanceOf('ChrisCollins\GeneralUtils\Tree\TreeNode', $instance);
+        $this->assertInstanceOf(TreeNode::class, $instance);
 
         $this->assertEquals($input, $instance->$getter());
     }
 
-    public function testGetChildrenReturnsNodesAddedByAddChild(): void
+    #[Test]
+    public function getChildrenReturnsNodesAddedByAddChild(): void
     {
         $node = new TreeNode($this->treeObjects[0]);
         $childNode = new TreeNode($this->treeObjects[1]);
@@ -82,7 +85,8 @@ class TreeNodeTest extends AbstractTestCase
         $this->assertEquals($childNode, $children[0]);
     }
 
-    public function testIsRootNodeReturnsExpectedValue(): void
+    #[Test]
+    public function isRootNodeReturnsExpectedValue(): void
     {
         $node = new TreeNode($this->treeObjects[0]);
         $this->assertTrue($node->isRootNode());
@@ -95,13 +99,14 @@ class TreeNodeTest extends AbstractTestCase
         $this->assertTrue($parent->isRootNode());
     }
 
-    public function testBuildTreeAndGetRootsReturnsExpectedTree(): void
+    #[Test]
+    public function buildTreeAndGetRootsReturnsExpectedTree(): void
     {
         $roots = TreeNode::buildTreeAndGetRoots($this->treeObjects);
 
         $this->assertCount(2, $roots);
-        $this->assertInstanceOf('ChrisCollins\GeneralUtils\Tree\TreeNode', $roots[0]);
-        $this->assertInstanceOf('ChrisCollins\GeneralUtils\Tree\TreeNode', $roots[1]);
+        $this->assertInstanceOf(TreeNode::class, $roots[0]);
+        $this->assertInstanceOf(TreeNode::class, $roots[1]);
 
         $treeRoot = null;
         $orphanedRoot = null;
@@ -169,6 +174,6 @@ class TreeNodeTest extends AbstractTestCase
         $level2Object2 = new TreeObjectStub(5, 2);
         $level2Object3 = new TreeObjectStub(6, 3);
 
-        return array($root1, $level1Object1, $level1Object2, $level2Object1, $level2Object2, $level2Object3, $root2);
+        return [$root1, $level1Object1, $level1Object2, $level2Object1, $level2Object2, $level2Object3, $root2];
     }
 }

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChrisCollins\GeneralUtils\Json;
 
 use ChrisCollins\GeneralUtils\Exception\JsonException;
+use stdClass;
 
 /**
  * JsonCodec
@@ -28,16 +31,9 @@ class JsonCodec
     ];
 
     /**
-     * Decode a JSON string to a PHP object/array.
-     *
-     * @param string $json The JSON.
-     * @param bool $associativeArray If true, an associative array will be returned, otherwise a stdClass object.
-     *
      * @throws JsonException Thrown if there was a problem.
-     *
-     * @return mixed An associative array or stdClass object.
      */
-    public function decode(string $json, bool $associativeArray = false)
+    public function decode(string $json, bool $associativeArray = false): array|stdClass
     {
         $decoded = json_decode($json, $associativeArray);
 
@@ -51,17 +47,9 @@ class JsonCodec
     }
 
     /**
-     * Encode a PHP value as a JSON string.
-     *
-     * @param mixed $value The value to encode.
-     * @param int $optionsMask A bitmask of options (see PHP's json_encode function for acceptable values).
-     * @param int $depth The maximum depth.
-     *
      * @throws JsonException Thrown if the there was an error encoding the value.
-     *
-     * @return string A JSON string.
      */
-    public function encode($value, int $optionsMask = 0, int $depth = 512): string
+    public function encode(mixed $value, int $optionsMask = 0, int $depth = 512): string
     {
         $encoded = json_encode($value, $optionsMask, $depth);
 
@@ -74,13 +62,6 @@ class JsonCodec
         return $encoded;
     }
 
-    /**
-     * Translate a json_last_error() error code into a readable string.
-     *
-     * @param int $errorCode The error code.
-     *
-     * @return string A string error message.
-     */
     private function translateErrorMessage(int $errorCode): string
     {
         return self::$errorMessages[$errorCode] ?? self::UNKNOWN_ERROR_MESSAGE;

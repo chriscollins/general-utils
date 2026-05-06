@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChrisCollins\GeneralUtils\Tree;
 
 /**
@@ -9,12 +11,5 @@ namespace ChrisCollins\GeneralUtils\Tree;
  */
 interface TreeNodeObjectInterface
 {
-    /**
-     * Determine if this object is the immediate parent of another object.
-     *
-     * @param TreeNodeObjectInterface $object The potential child.
-     *
-     * @return bool True if this object is the parent of the given object.
-     */
     public function isParentOf(TreeNodeObjectInterface $object): bool;
 }
